@@ -5,32 +5,20 @@
 #include <string>
 #include <algorithm>
 #include <unordered_map>
+#include "song.h"
+#include "playlist.h"
 
 using namespace std;
 
-class song
-{
-public:
-    vector<string> artists; //if more than one it's " if one it starts with bracket [ and name is still ex: ['artist name']
-    //if more than one artist: "['artist 1', 'artist 2']"
-    float danceability;
-    int duration;
-    float energy;
-    bool explicitness;
-    float instrumentalness;
-    float loudness;
-    string songName;
-    int popularity;
-    float speechiness;
-    float tempo;
-    float valence;
-    int year;
-    vector<string> genres;
-};
+void readFiles(vector<song>&);
 
-int main()
+int main() {
+    vector<song> SongCatalog;
+    readFiles(SongCatalog);
+    return 0;
+}
 
-{
+void readFiles(vector<song> &SongCatalog) {
     ifstream file;
     string line;
     string lineObj;
@@ -63,14 +51,12 @@ int main()
                 genreMap[temp].push_back(lineObj2.substr(2, lineObj2.size()-6));
             }
             else {
-                genreMap[temp].push_back(lineObj.substr(2, lineObj.size()-3));
+                genreMap[temp].push_back(lineObj.substr(2, lineObj.size()-5));
             }
         }
     }
 
     file.close();
-
-    vector<song>SongCatalog;
 
     file.open("/Users/veronicasoden/CLionProjects/proj3/OfficialDataset.csv");
     getline(file, line); // to get columns;
@@ -100,17 +86,21 @@ int main()
                 it=genreMap.find(artistName);
                 if(it!=genreMap.end()) {
                     for(int i = 0; i < genreMap[artistName].size(); i++) {
-                        tempSong.genres.push_back(genreMap[artistName][i]);
+                        if(find(tempSong.genres.begin(), tempSong.genres.end(), genreMap[artistName][i]) == tempSong.genres.end()) {
+                            tempSong.genres.push_back(genreMap[artistName][i]);
+                        }
                     }
                 }
                 tempSong.artists.push_back(artistName);
                 getline(iss, lineObj, delim);
             }
-            artistName = lineObj.substr(3, lineObj.size()-5);
+            artistName = lineObj.substr(2, lineObj.size()-5);
             it=genreMap.find(artistName);
             if(it!=genreMap.end()) {
                 for(int i = 0; i < genreMap[artistName].size(); i++) {
-                    tempSong.genres.push_back(genreMap[artistName][i]);
+                    if(find(tempSong.genres.begin(), tempSong.genres.end(), genreMap[artistName][i]) == tempSong.genres.end()) {
+                        tempSong.genres.push_back(genreMap[artistName][i]);
+                    }
                 }
             }
             tempSong.artists.push_back(artistName);
@@ -179,8 +169,6 @@ int main()
         SongCatalog.push_back(tempSong);
         tempSong.artists.clear();
     }
-    
     file.close();
-    
-    return 0;
+    return;
 }
