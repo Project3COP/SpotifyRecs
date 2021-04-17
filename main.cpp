@@ -7,10 +7,12 @@
 #include <unordered_map>
 #include "song.h"
 #include "playlist.h"
+#include "Survey.h"
 
 using namespace std;
 
 void readFiles(vector<song>&);
+void readSurvey(Survey);
 
 int main() {
     vector<song> SongCatalog;
@@ -168,6 +170,139 @@ void readFiles(vector<song> &SongCatalog) {
 
         SongCatalog.push_back(tempSong);
         tempSong.artists.clear();
+    }
+    file.close();
+    return;
+}
+
+void readSurvey(Survey results) {
+    ifstream file;
+    string line;
+    string lineObj;
+    char delim = ',';
+
+    //Results: enter the file path for the results from google forms
+    file.open("/Users/maia/Documents/GitHub/potential-carnival/Test2.csv");
+    getline(file, line); // to get columns
+
+    while (!file.eof()) {
+        getline(file, line);
+        istringstream iss(line);
+
+        getline(iss, lineObj, delim);
+
+        //Playlist Name:
+        getline(iss, lineObj, delim);
+        results.playlistName = lineObj;
+
+        //Favorite Genres (multiple):
+        getline(iss, lineObj, delim);
+        stringstream ss(lineObj);
+
+        string substr;
+        while (ss.good()) {
+            getline(ss, substr, ';');
+            results.favGenres.push_back(substr);
+        }
+
+        for (size_t i = 0; i < results.favGenres.size(); i++) {
+            cout << "Favorite Genres: " << results.favGenres[i] << endl;
+        }
+
+        //Favorite Genre (single):
+        getline(iss, lineObj, delim);
+        results.favGenre = lineObj;
+
+        //1 = Instrumental; 0 = Lyrics
+        getline(iss, lineObj, delim);
+
+        if (lineObj == "\"Instrumental\"") {
+            results.isInstrumental = true;
+        }
+        else {
+            results.isInstrumental = false;
+        }
+
+        //1 = Energetic; 0 = Calming
+        getline(iss, lineObj, delim);
+
+        if (lineObj == "\"Energetic\"") {
+            results.isEnergetic = true;
+        }
+        else {
+            results.isEnergetic = false;
+        }
+
+        //explicit: 1 = yes; 0 = no
+        getline(iss, lineObj, delim);
+        if (lineObj == "\"Include explicit songs\"") {
+            results.includeExplicit = true;
+        }
+        else {
+            results.includeExplicit = false;
+        }
+
+        //1 = fast; 0 = slow
+        getline(iss, lineObj, delim);
+        if (lineObj == "\"Fast Tempo\"") {
+            results.fastTempo = true;
+        }
+        else {
+            results.fastTempo = false;
+        }
+        
+        //Favorite Decade(s):
+        getline(iss, lineObj, delim);
+        if(lineObj.find("1920") != lineObj.npos) {
+            results.favDecades.push_back(true);
+        }
+        else {
+            results.favDecades.push_back(false);
+        }
+
+        if(lineObj.find("1960") != lineObj.npos) {
+            results.favDecades.push_back(true);
+        }
+        else {
+            results.favDecades.push_back(false);
+        }
+
+        if(lineObj.find("1980") != lineObj.npos) {
+            results.favDecades.push_back(true);
+        }
+        else {
+            results.favDecades.push_back(false);
+        }
+
+        if(lineObj.find("2000") != lineObj.npos) {
+            results.favDecades.push_back(true);
+        }
+        else {
+            results.favDecades.push_back(false);
+        }
+
+        //1 = happy; 0 = sad/angry
+        getline(iss, lineObj, delim);
+
+        if (lineObj == "\"Happy\"")
+        {
+            results.isHappy = true;
+        }
+        else
+        {
+            results.isHappy = false;
+        }
+        
+        //1 = loud; 0 = quiet
+        getline(iss, lineObj, delim);
+        if (lineObj == "\"Louder\"")
+        {
+            results.isLoud = true;
+        }
+        else
+        {
+            results.isLoud = false;
+        }
     }
     file.close();
     return;
