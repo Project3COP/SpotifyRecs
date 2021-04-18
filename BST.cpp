@@ -26,36 +26,35 @@ bool BST::insertRecusrion(Node* temp, song* Song) {
     //three main insert cases
     //first case check if root has yet to be made, i.e., first insertion
     if(root == nullptr) {
-        root = new Node(*Song);
+        root = new Node(Song);
         return true;
     }
-    //use song duration to sort
-    else if(Song->duration > temp->Song.duration) {
+        //use song duration to sort
+    else if(Song->duration > temp->Song->duration) {
         if (temp->right == nullptr) {
-            temp->right = new Node(*Song);
+            temp->right = new Node(Song);
+            return true;
         }
         else {
             //use recursion to insert new node
             insertRecusrion(temp->right, Song);
-            return true;
         }
     }
         //id number is less than node
-    else if(Song->duration > temp->Song.duration) {
+    else if(Song->duration > temp->Song->duration) {
         if (temp->left == nullptr) {
-            temp->left = new Node(*Song);
+            temp->left = new Node(Song);
+            return true;
         }
         else {
             //use recursion to insert new node
             insertRecusrion(temp->left, Song);
-            return true;
         }
     }
     else {
         return false;
     }
     return true;
-
 }
 
 // method to find height of given node
@@ -72,7 +71,7 @@ void BST::traverseInOrder(Node* temp, queue<song> toQ){
         return;
     }
     traverseInOrder(temp->left, toQ);
-    toQ.push(temp->Song);
+    toQ.push(*(temp->Song));
     traverseInOrder(temp->right, toQ);
 }
 
@@ -87,10 +86,10 @@ bool BST::search(song* Song) {
 }
 
 Node* BST::searchRecursion(Node* root, song* Song) {
-    if(root == nullptr || root->Song.duration == Song->duration) {
+    if(root == nullptr || root->Song->duration == Song->duration) {
         return root;
     }
-    else if(Song->duration < root->Song.duration) {
+    else if(Song->duration < root->Song->duration) {
         return searchRecursion(root->left, Song);
     }
     else {

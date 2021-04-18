@@ -10,18 +10,19 @@
 
 using namespace std;
 
-playlist::playlist(vector<song> catalog, string nameP, vector<string> genres, string mainG, vector<bool> songTimes, bool inst, bool exp,
-                   bool fastT, bool happy, bool loud) {
-    this->playName = nameP;
-    
-    this->likedGenres = genres;
-    this->mainGenre = mainG;
-    this->songTimes = songTimes;
-    this->instrumental = inst;
-    this->explicits = exp;
-    this->fastTempo = fastT;
-    this->happy = happy;
-    this->loud = loud;
+
+
+playlist::playlist(vector<song> catalog, Survey surveyRes) {
+    this->playName = surveyRes.playlistName;
+
+    this->likedGenres = surveyRes.favGenres;
+    this->mainGenre = surveyRes.favGenre;
+    this->songTimes = surveyRes.favDecades;
+    this->instrumental = surveyRes.isInstrumental;
+    this->explicits = surveyRes.includeExplicit;
+    this->fastTempo = surveyRes.fastTempo;
+    this->happy = surveyRes.isHappy;
+    this->loud = surveyRes.isLoud;
 
     int points = 0;
     vector<song>::iterator it = catalog.begin();
