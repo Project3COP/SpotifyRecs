@@ -9,6 +9,7 @@
 #include <string>
 #include "song.h"
 #include "BST.h"
+#include "Survey.h"
 
 using namespace std;
 
@@ -18,8 +19,7 @@ public:
     queue<song> songQ;
     string playName;
 
-    playlist(vector<song> catalog, string nameP, vector<string> genres, string mainG, vector<bool> songTimes, bool inst, bool exp,
-            bool fastT, bool happy, bool loud);
+    playlist(vector<song> catalog, Survey surveyRes);
 
 private:
     vector<string> likedGenres;
