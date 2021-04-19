@@ -49,7 +49,6 @@ int main() {
     {
         cout << arr[i].duration << " ";
     }
-
     
     return 0;
 }
