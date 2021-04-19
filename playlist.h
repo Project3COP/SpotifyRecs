@@ -6,20 +6,22 @@
 #define PROJ3_PLAYLIST_H
 
 #include <queue>
+#include <vector>
 #include <string>
 #include "song.h"
 #include "BST.h"
+#include "Survey.h"
 
 using namespace std;
 
 class playlist {
 public:
-    BST tree;
-    queue<song> songQ;
+    BST* tree;
+    vector<song> songQ;
     string playName;
 
-    playlist(vector<song> catalog, string nameP, vector<string> genres, string mainG, vector<bool> songTimes, bool inst, bool exp,
-            bool fastT, bool happy, bool loud);
+    playlist(vector<song> catalog, Survey surveyRes, int cap);
+    void shuffle();
 
 private:
     vector<string> likedGenres;

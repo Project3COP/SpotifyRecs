@@ -28,6 +28,8 @@ public:
     float valence;
     int year;
     vector<string> genres;
+
+    int fitness;
 };
 
 #endif //PROJ3_SONG_H
