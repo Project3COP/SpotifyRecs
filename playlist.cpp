@@ -25,6 +25,7 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
 
     this->tree = new BST();
 
+
     int genreCount = 0;
     int points = 0;
 

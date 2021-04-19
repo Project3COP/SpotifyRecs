@@ -16,13 +16,16 @@ using namespace std;
 Survey readSurvey();
 vector<string>getGenres(string genreNums);
 void readFiles(vector<song>&);
+
 int Shellsort(song arr[], int n);
+
 
 int main() {
     Survey results = readSurvey(); //reads in survey results
 
     vector<song> SongCatalog;
     readFiles(SongCatalog);
+
 
     int fitCap = 10;
     playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
@@ -34,16 +37,19 @@ int main() {
     playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
     playlistObj->shuffle();
 
+
     song *arr = &SongCatalog[0];
     for (size_t i = 0; i < SongCatalog.size(); ++i) {
         arr[i] = SongCatalog[i];
     }
 
    Shellsort(arr, SongCatalog.size());
+
    /*for(int i = 0; i < SongCatalog.size(); i ++)
     {
         cout << arr[i].duration << " ";
     }*/
+
 
     return 0;
 }
@@ -462,6 +468,7 @@ void readFiles(vector<song> &SongCatalog) {
     return;
 }
 
+
 int Shellsort(song arr[], int n)
 {
 /* From Lecture Slides on Shellsort in Module 6
@@ -492,3 +499,4 @@ int Shellsort(song arr[], int n)
     }
     return 0;
 }
+
