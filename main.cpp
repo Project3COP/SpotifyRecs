@@ -21,29 +21,36 @@ int Shellsort(song arr[], int n);
 
 
 int main() {
-    Survey results = readSurvey(); //reads in survey results
-
+     
+    //*****Generates SongCatalog*****
     vector<song> SongCatalog;
     readFiles(SongCatalog);
 
+    //*****Survey*****
+    Survey results = readSurvey(); //reads in survey results
 
-    // int fitCap = 10;
-    // playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
-    // while(playlistObj->tree->size < 10) {
-    //     delete playlistObj;
-    //     playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
-    // }
-    // //generates vector songQ by post order traversal
-    // playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
-    // playlistObj->shuffle();
+    //****Generates Playlist*****
+    int fitCap = 10;
+    playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
+    while(playlistObj->tree->size < 10) {
+        delete playlistObj;
+        playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
+    }
+    //generates vector songQ by post order traversal
+    playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
+    playlistObj->shuffle();
 
 
+    
+    //*****ShellSort*****
     song *arr = &SongCatalog[0];
     for (size_t i = 0; i < SongCatalog.size(); ++i) {
         arr[i] = SongCatalog[i];
     }
 
     Shellsort(arr, SongCatalog.size());
+
+
 
     return 0;
 }
