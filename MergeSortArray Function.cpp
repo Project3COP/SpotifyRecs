@@ -67,6 +67,7 @@ void mergeSort(song arr[], int left, int right) {
     merge(arr, left, mid, right);
 }
 
+/*
 int main()
 {
     int arr_size = sizeof(arr) / sizeof(arr[0]);
@@ -78,3 +79,4 @@ int main()
 
     return 0;
 }
+*/
