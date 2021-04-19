@@ -10,14 +10,18 @@
 #include "Survey.h"
 #include "BST.h"
 #include "Node.h"
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
+
 
 Survey readSurvey();
 vector<string>getGenres(string genreNums);
 void readFiles(vector<song>&);
-
 int Shellsort(song arr[], int n);
+void mergeSort(vector<song>&, int, int);
+void merge(vector<song>&, int, int, int);
 
 
 int main() {
@@ -27,30 +31,57 @@ int main() {
     readFiles(SongCatalog);
 
     //*****Survey*****
-    Survey results = readSurvey(); //reads in survey results
+    // Survey results = readSurvey(); //reads in survey results
 
-    //****Generates Playlist*****
-    int fitCap = 10;
-    playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
-    while(playlistObj->tree->size < 10) {
-        delete playlistObj;
-        playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
-    }
-    //generates vector songQ by post order traversal
-    playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
-    playlistObj->shuffle();
+    // //****Generates Playlist*****
+    // int fitCap = 10;
+    // playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
+    // while(playlistObj->tree->size < 10) {
+    //     delete playlistObj;
+    //     playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
+    // }
+    // //generates vector songQ by post order traversal
+    // playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
+    // playlistObj->shuffle();
 
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+  
+    start = std::chrono::system_clock::now();
+    // Subtract stop and start timepoints and
+    // cast it to required unit. Predefined units
+    // are nanoseconds, microseconds, milliseconds,
+    // seconds, minutes, hours. Use duration_cast()
+    // function.
+   
 
-    
     //*****ShellSort*****
     song *arr = &SongCatalog[0];
     for (size_t i = 0; i < SongCatalog.size(); ++i) {
         arr[i] = SongCatalog[i];
     }
-
     Shellsort(arr, SongCatalog.size());
 
+     end = std::chrono::system_clock::now();  
+    // To get the value of duration use the count()
+    // member function on the duration object
+    std::chrono::duration<double> elapsed_seconds = end - start;
+  
+    std::cout << "elapsed time to do shellsort: " << elapsed_seconds.count() << "s\n";
 
+
+
+  
+
+
+    //*****MergeSort*****
+    // int arr_size = sizeof(SongCatalog) / sizeof(SongCatalog[0]);
+    // vector<song>&temp = SongCatalog;
+    // mergeSort(temp, 0, SongCatalog.size());
+    // for(int i = 0; i < 500; i ++)
+    // {
+    //     cout << arr[i].duration << " "
+    // }
+    
 
     return 0;
 }
@@ -500,3 +531,59 @@ int Shellsort(song arr[], int n)
     return 0;
 }
 
+void merge(song arr[], int left, int mid, int right) {
+    int temp1 = mid - left + 1;
+    int temp2 = right - mid;
+ 
+    // Create temp arrays
+    song L[temp1], R[temp2];
+ 
+    // Copy data to temp arrays L[] and R[]
+    for (int i = 0; i < temp1; i++) {
+        L[i] = arr[left + i];
+    }
+    for (int j = 0; j < temp2; j++) {
+        R[j] = arr[mid + 1 + j];
+    }
+ 
+    // Merge the temp arrays:
+    int i = 0;  //First subarray
+    int j = 0;  //Second subarray
+    int k = left;  //Merged subarray
+ 
+    while (i < temp1 && j < temp2) {
+        if (L[i].duration <= R[j].duration) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of L[]
+    while (i < temp1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of R[]
+    while (j < temp2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(song arr[], int left, int right) {
+    if (left >= right) {
+        return;  //returns recursively
+    }
+    int mid = left + (right - left)/2;
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid+1, right);
+    merge(arr, left, mid, right);
+}
