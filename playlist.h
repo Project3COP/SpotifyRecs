@@ -20,6 +20,8 @@ public:
     vector<song> songQ;
     string playName;
 
+    playlist(vector<song> catalog, Survey surveyRes, int cap);
+    void shuffle();
 
 private:
     vector<string> likedGenres;
