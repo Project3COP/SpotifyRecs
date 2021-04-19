@@ -8,14 +8,15 @@
 #include "song.h"
 #include "playlist.h"
 #include "Survey.h"
+#include "BST.h"
+#include "Node.h"
 
 using namespace std;
 
 Survey readSurvey();
 vector<string>getGenres(string genreNums);
 void readFiles(vector<song>&);
-void mergeSort(vector<song>&, int, int);
-void merge(vector<song>&, int, int, int);
+int Shellsort(song arr[], int n);
 
 int main() {
     Survey results = readSurvey(); //reads in survey results
@@ -39,11 +40,11 @@ int main() {
     }
 
    Shellsort(arr, SongCatalog.size());
-   for(int i = 0; i < SongCatalog.size(); i ++)
+   /*for(int i = 0; i < SongCatalog.size(); i ++)
     {
         cout << arr[i].duration << " ";
-    }
-    
+    }*/
+
     return 0;
 }
 

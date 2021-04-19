@@ -40,7 +40,7 @@ bool BST::insertRecusrion(Node* temp, song* Song) {
         root = new Node(*Song);
         return true;
     }
-    //use song duration to sort
+        //use song duration to sort
     else if(Song->duration > temp->Song.duration) {
         if (temp->right == nullptr) {
             temp->right = new Node(*Song);
@@ -79,13 +79,12 @@ int BST::height(Node* temp) {
 vector<song> BST::traverseInOrder(Node* temp){
     vector<song> toQL;
     vector<song> toQR;
-    if(temp == nullptr) {
-        return {};
+    if(temp != nullptr) {
+        toQL = traverseInOrder(temp->left);
+        toQL.push_back(temp->Song);
+        toQR = traverseInOrder(temp->right);
+        toQL.insert(toQL.end(), toQR.begin(), toQR.end());
     }
-    toQL = traverseInOrder(temp->left);
-    toQL.push_back(temp->Song);
-    toQR = traverseInOrder(temp->right);
-    toQL.insert(toQL.end(), toQR.begin(), toQR.end());
     return toQL;
 }
 
@@ -94,18 +93,17 @@ vector<song> BST::traversePostOrder(Node* temp){
     vector<song> toQ;
     vector<song> toQL;
     vector<song> toQR;
-    if(temp == nullptr) {
-        return {};
+    if(temp != nullptr) {
+        toQL = traversePostOrder(temp->left);
+        if (toQL.size()) {
+            toQ.insert(toQ.end(), toQL.begin(), toQL.end());
+        }
+        toQR = traversePostOrder(temp->right);
+        if (toQR.size()) {
+            toQ.insert(toQ.end(), toQR.begin(), toQR.end());
+        }
+        toQ.push_back(temp->Song);
     }
-    toQL = traversePostOrder(temp->left);
-    if(toQL.size()) {
-        toQ.insert(toQ.end(), toQL.begin(), toQL.end());
-    }
-    toQR = traversePostOrder(temp->right);
-    if(toQR.size()) {
-        toQ.insert(toQ.end(), toQR.begin(), toQR.end());
-    }
-    toQ.push_back(temp->Song);
     return toQ;
 }
 

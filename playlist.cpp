@@ -2,10 +2,11 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "playlist.h"
 #include "song.h"
 #include "BST.h"
 #include "Survey.h"
+#include "Node.h"
+#include "BST.h"
 
 using namespace std;
 
