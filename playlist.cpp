@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "playlist.h"
 #include "song.h"
 #include "BST.h"
 #include "Survey.h"
@@ -24,7 +25,6 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
     this->loud = surveyRes.isLoud;
 
     this->tree = new BST();
-
 
     int genreCount = 0;
     int points = 0;
@@ -128,6 +128,7 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
         points = 0;
         genreCount = 0;
     }
+    return;
 }
 
 //shuffles songs using random generator to insert random songs into new tree unbalanced BST
