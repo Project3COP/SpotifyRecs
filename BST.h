@@ -15,14 +15,15 @@
 
 class BST {
 public:
-    Node* root = nullptr;
-    int size = 0;
+    BST(void);
+    Node* root;
+    int size;
 
     bool insert(song*);
     bool insertRecusrion(Node*, song*);
-    bool search(song*);
     Node* searchRecursion(Node*, song*);
-    void traverseInOrder(Node*, queue<song>);
+    vector<song> traverseInOrder(Node*);
+    vector<song> traversePostOrder(Node*);
     int height(Node*);
 };
 

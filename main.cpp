@@ -8,89 +8,52 @@
 #include "song.h"
 #include "playlist.h"
 #include "Survey.h"
+#include "BST.h"
+#include "Node.h"
 
 using namespace std;
 
+Survey readSurvey();
+vector<string>getGenres(string genreNums);
 void readFiles(vector<song>&);
-vector<string>getGenres(string genreNums) {
-    vector<string>favGenres;
-    for (int i = 0; i < genreNums.size(); i++) {
-        bool valid = false;
-        if (int(genreNums[i]) == 49)
-        {
-            favGenres.push_back("Pop");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 50)
-        {
-            favGenres.push_back("Hip-Hop/Rap");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 51)
-        {
-            favGenres.push_back("R&B");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 52)
-        {
-            favGenres.push_back("Rock");
-            valid = true;
-        }
 
-        if (int(genreNums[i]) == 53)
-        {
-            favGenres.push_back("Electronic");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 54)
-        {
-            favGenres.push_back("Alternative");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 56)
-        {
-            favGenres.push_back("Instrumental");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 57)
-        {
-            favGenres.push_back("Country");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 58)
-        {
-            favGenres.push_back("Jazz");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 59)
-        {
-            favGenres.push_back("Classical");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 60)
-        {
-            favGenres.push_back("Reggae");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 61)
-        {
-            favGenres.push_back("Foreign");
-            valid = true;
-        }
-        if (int(genreNums[i]) == 62)
-        {
-            favGenres.push_back("No preference, I enjoy all types");
-            valid = true;
-        }
-        if(!valid)
-        {
-            favGenres.empty();
-            return favGenres;
-        }
+int Shellsort(song arr[], int n);
+
+
+int main() {
+    Survey results = readSurvey(); //reads in survey results
+
+    vector<song> SongCatalog;
+    readFiles(SongCatalog);
+
+
+    int fitCap = 10;
+    playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
+    while(playlistObj->tree->size < 10) {
+        delete playlistObj;
+        playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
     }
-    return favGenres;
+    //generates vector songQ by post order traversal
+    playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
+    playlistObj->shuffle();
 
+
+    song *arr = &SongCatalog[0];
+    for (size_t i = 0; i < SongCatalog.size(); ++i) {
+        arr[i] = SongCatalog[i];
+    }
+
+   Shellsort(arr, SongCatalog.size());
+
+   /*for(int i = 0; i < SongCatalog.size(); i ++)
+    {
+        cout << arr[i].duration << " ";
+    }*/
+
+
+    return 0;
 }
+
 Survey readSurvey() {
 
     bool invalidResult = false;
@@ -110,8 +73,10 @@ Survey readSurvey() {
             cout << "What are your favorite genres?" << endl;
             cout << "Input should be a list of numbers without spaces, ex: R&B and Jazz  is '39'. " << endl;
             string genreNums;
-            cout << "1.)Pop 2.)Hip-Hop/Rap 3.)R&B 4.)Rock 5.)Electronic 6.)Alternative 7.)Instrumental 8.)Country 9.)Jazz"
-                    "10.)Classical 11.)Reggae 12.)Foreign 13.)No preference, I enjoy all types" << endl;
+            cout << "1.)Pop" << endl << "2.)Hip-Hop" << endl << "3.)Rap" << endl << "4.)R&B" << endl << "5.)Rock"
+                    << endl << "6.)Electronic" << endl << "7.)Alternative" << endl << "8.)Instrumental" << endl <<
+                    "9.)Country" << endl << "A.)Jazz" << endl << "B.)Classical" << endl << "C.)Reggae" << endl <<
+                    "D.)Foreign" << endl << "E.)No preference, I enjoy all types" << endl;
             cin >> genreNums;
             results.favGenres = getGenres(genreNums);
             if (results.favGenres.size() == 0) {
@@ -124,10 +89,12 @@ Survey readSurvey() {
             string genre;
             cout << "If you had to pick one, which is your favorite genre?" << endl;
             cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
-            cout << "1.)Pop 2.)Hip-Hop/Rap 3.)R&B 4.)Rock 5.)Electronic 6.)Alternative 7.)Instrumental 8.)Country 9.)Jazz"
-                    "10.)Classical 11.)Reggae 12.)Foreign 13.)No preference, I enjoy all types" << endl;
-            cin >> results.favGenre;
-
+            cout << "1.)Pop" << endl << "2.)Hip-Hop" << endl << "3.)Rap" << endl << "4.)R&B" << endl << "5.)Rock"
+                 << endl << "6.)Electronic" << endl << "7.)Alternative" << endl << "8.)Instrumental" << endl <<
+                 "9.)Country" << endl << "A.)Jazz" << endl << "B.)Classical" << endl << "C.)Reggae" << endl <<
+                 "D.)Foreign" << endl;
+            cin >> genre;
+            results.favGenre = getGenres(genre)[0];
 
             string ans;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
@@ -226,8 +193,6 @@ Survey readSurvey() {
 
             }
 
-
-
             cout << "Do you prefer happy (1) or sad music (2)?" << endl;
             cin >> ans;
             if (ans == "1")
@@ -267,57 +232,85 @@ Survey readSurvey() {
 
     return results;
 }
-int Shellsort(song arr[], int n)
-{
-/* From Lecture Slides on Shellsort in Module 6
- * 1. Set the initial value of gapto n / 2
- * 2. while gap > 0
- * 3. foreach array element from position gap to the last element
- * 4. Insert this element where it belongs in its subarray.
- * 5. if gap is 2, set it to 1
- * 6. else gap = gap / 2.2.
- */
 
-    int gap = n/2;
-    while(gap > 0)
-    {
-        for (int i = gap; i < n; i += 1)
+vector<string>getGenres(string genreNums) {
+    vector<string>favGenres;
+    for (int i = 0; i < genreNums.size(); i++) {
+        bool valid = false;
+        if (int(genreNums[i]) == 49 || int(genreNums[i]) == 69)
         {
-
-            song temp = arr[i];
-
-
-            int j;
-            for (j = i; j >= gap && arr[j - gap].duration > temp.duration; j -= gap)
-                arr[j] = arr[j - gap];
-
-            arr[j] = temp;
+            favGenres.push_back("pop");
+            valid = true;
         }
-        gap = gap/2;
+        if (int(genreNums[i]) == 50 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("hip hop");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 51 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("rap");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 52 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("r&b");
+            valid = true;
+        }
+
+        if (int(genreNums[i]) == 53 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("rock");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 54 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("electro");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 56 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("alternative");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 57 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("instrumental");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 58 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("country");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 65 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("jazz");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 66 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("classical");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 67 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("reggae");
+            valid = true;
+        }
+        if (int(genreNums[i]) == 68 || int(genreNums[i]) == 69)
+        {
+            favGenres.push_back("foreign");
+            valid = true;
+        }
+        if(!valid)
+        {
+            favGenres.empty();
+            return favGenres;
+        }
     }
-    return 0;
-}
+    return favGenres;
 
-int main() {
-    Survey results = readSurvey(); //reads in survey results
-
-    vector<song> SongCatalog;
-    readFiles(SongCatalog);
-
-    playlist playlsit = playlist(SongCatalog, results); //generates playlist
-
-    song *arr = &SongCatalog[0];
-    for (size_t i = 0; i < SongCatalog.size(); ++i) {
-        arr[i] = SongCatalog[i];
-    }
-
-   Shellsort(arr, SongCatalog.size());
-   for(int i = 0; i < SongCatalog.size(); i ++)
-    {
-        cout << arr[i].duration << " ";
-    }
-
-    return 0;
 }
 
 void readFiles(vector<song> &SongCatalog) {
@@ -473,5 +466,37 @@ void readFiles(vector<song> &SongCatalog) {
     }
     file.close();
     return;
+}
+
+
+int Shellsort(song arr[], int n)
+{
+/* From Lecture Slides on Shellsort in Module 6
+ * 1. Set the initial value of gapto n / 2
+ * 2. while gap > 0
+ * 3. foreach array element from position gap to the last element
+ * 4. Insert this element where it belongs in its subarray.
+ * 5. if gap is 2, set it to 1
+ * 6. else gap = gap / 2.2.
+ */
+
+    int gap = n/2;
+    while(gap > 0)
+    {
+        for (int i = gap; i < n; i += 1)
+        {
+
+            song temp = arr[i];
+
+
+            int j;
+            for (j = i; j >= gap && arr[j - gap].duration > temp.duration; j -= gap)
+                arr[j] = arr[j - gap];
+
+            arr[j] = temp;
+        }
+        gap = gap/2;
+    }
+    return 0;
 }
 

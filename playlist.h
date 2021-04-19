@@ -6,6 +6,7 @@
 #define PROJ3_PLAYLIST_H
 
 #include <queue>
+#include <vector>
 #include <string>
 #include "song.h"
 #include "BST.h"
@@ -15,11 +16,10 @@ using namespace std;
 
 class playlist {
 public:
-    BST tree;
-    queue<song> songQ;
+    BST* tree;
+    vector<song> songQ;
     string playName;
 
-    playlist(vector<song> catalog, Survey surveyRes);
 
 private:
     vector<string> likedGenres;
