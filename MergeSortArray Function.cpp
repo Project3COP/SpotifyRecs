@@ -15,7 +15,7 @@ void merge(song arr[], int left, int mid, int right) {
     int temp2 = right - mid;
  
     // Create temp arrays
-    int L[temp1], R[temp2];
+    song L[temp1], R[temp2];
  
     // Copy data to temp arrays L[] and R[]
     for (int i = 0; i < temp1; i++) {
@@ -31,7 +31,7 @@ void merge(song arr[], int left, int mid, int right) {
     int k = left;  //Merged subarray
  
     while (i < temp1 && j < temp2) {
-        if (L[i] <= R[j]) {
+        if (L[i].duration <= R[j].duration) {
             arr[k] = L[i];
             i++;
         }
