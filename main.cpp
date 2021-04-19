@@ -45,12 +45,6 @@ int main() {
 
     Shellsort(arr, SongCatalog.size());
 
-   for(int i = 0; i < SongCatalog.size(); i ++)
-    {
-        cout << arr[i].duration << " ";
-    }
-
-
     return 0;
 }
 
