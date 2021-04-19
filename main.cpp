@@ -22,6 +22,7 @@ void readFiles(vector<song>&);
 int Shellsort(song arr[], int n);
 void mergeSort(vector<song>&, int, int);
 void merge(vector<song>&, int, int, int);
+void shellSortWithTimeOutput(vector<song>);
 
 
 int main() {
@@ -44,33 +45,8 @@ int main() {
     // playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
     // playlistObj->shuffle();
 
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-  
-    start = std::chrono::system_clock::now();
-    // Subtract stop and start timepoints and
-    // cast it to required unit. Predefined units
-    // are nanoseconds, microseconds, milliseconds,
-    // seconds, minutes, hours. Use duration_cast()
-    // function.
-   
 
-    //*****ShellSort*****
-    song *arr = &SongCatalog[0];
-    for (size_t i = 0; i < SongCatalog.size(); ++i) {
-        arr[i] = SongCatalog[i];
-    }
-    Shellsort(arr, SongCatalog.size());
-
-     end = std::chrono::system_clock::now();  
-    // To get the value of duration use the count()
-    // member function on the duration object
-    std::chrono::duration<double> elapsed_seconds = end - start;
-  
-    std::cout << "elapsed time to do shellsort: " << elapsed_seconds.count() << "s\n";
-
-
-
-  
+    shellSortWithTimeOutput(SongCatalog);
 
 
     //*****MergeSort*****
@@ -81,7 +57,6 @@ int main() {
     // {
     //     cout << arr[i].duration << " "
     // }
-    
 
     return 0;
 }
@@ -529,6 +504,23 @@ int Shellsort(song arr[], int n)
         gap = gap/2;
     }
     return 0;
+}
+
+void shellSortWithTimeOutput(vector<song>SongCatalog)
+{
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+
+    //*****ShellSort*****
+    start = std::chrono::system_clock::now();
+    song *arr = &SongCatalog[0];
+    for (size_t i = 0; i < SongCatalog.size(); ++i) {
+        arr[i] = SongCatalog[i];
+    }
+    Shellsort(arr, SongCatalog.size());
+    end = std::chrono::system_clock::now();  
+    std::chrono::duration<double> elapsed_seconds = end - start;
+  
+    std::cout << "elapsed time to do shellsort: " << elapsed_seconds.count() << "s\n";
 }
 
 void merge(song arr[], int left, int mid, int right) {
