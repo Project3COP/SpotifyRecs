@@ -75,9 +75,9 @@ Survey readSurvey() {
             cout << "Input should be a list of lowercase letters without spaces, ex: R&B and Jazz  is 'dg'. " << endl;
             string genreNums;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
-                    << endl << "6.)Electronic" << endl << "7.)Alternative" << endl << "8.)Instrumental" << endl <<
-                    "f.)Country" << endl << "g.)Jazz" << endl << "h.)Classical" << endl << "i.)Reggae" << endl <<
-                    "j.)Foreign" << endl << "k.)No preference, I enjoy all types" << endl;
+                 << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl <<
+                 "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl <<
+                 "m.)Foreign" << endl << "n.)No preference, I enjoy all types" << endl;
             cin >> genreNums;
             results.favGenres = getGenres(genreNums);
             if (results.favGenres.size() == 0) {
@@ -91,11 +91,11 @@ Survey readSurvey() {
             cout << "If you had to pick one, which is your favorite genre?" << endl;
             cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
-                 << endl << "6.)Electronic" << endl << "7.)Alternative" << endl << "8.)Instrumental" << endl <<
-                 "f.)Country" << endl << "g.)Jazz" << endl << "h.)Classical" << endl << "i.)Reggae" << endl <<
-                 "j.)Foreign" << endl;
+                 << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl <<
+                 "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl <<
+                 "m.)Foreign" << endl;
             cin >> genre;
-            results.favGenre = genre;
+            results.favGenre = getGenres(genre)[0];
 
             string ans;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
@@ -238,70 +238,76 @@ vector<string>getGenres(string genreNums) {
     vector<string>favGenres;
     for (int i = 0; i < genreNums.size(); i++) {
         bool valid = false;
+        if(int(genreNums[i]) == 110) {
+            favGenres = {"pop", "hip hop", "rap", "r&b", "rock", "electro", "alternative",
+                         "instrumental", "country", "jazz", "classical", "reggae", "foreign"};
+            valid = true;
+            break;
+        }
         if (int(genreNums[i]) == 97)
         {
-            favGenres.push_back("Pop");
+            favGenres.push_back("pop");
             valid = true;
         }
         if (int(genreNums[i]) == 98)
         {
-            favGenres.push_back("Hip-Hop");
+            favGenres.push_back("hip hop");
             valid = true;
         }
         if (int(genreNums[i]) == 99)
         {
-            favGenres.push_back("Rap");
+            favGenres.push_back("rap");
             valid = true;
         }
         if (int(genreNums[i]) == 100)
         {
-            favGenres.push_back("R&B");
+            favGenres.push_back("r&b");
             valid = true;
         }
 
         if (int(genreNums[i]) == 101)
         {
-            favGenres.push_back("Rock");
+            favGenres.push_back("rock");
             valid = true;
         }
         if (int(genreNums[i]) == 102)
         {
-            favGenres.push_back("Electronic");
+            favGenres.push_back("electro");
             valid = true;
         }
         if (int(genreNums[i]) == 103)
         {
-            favGenres.push_back("Alternative");
+            favGenres.push_back("alternative");
             valid = true;
         }
         if (int(genreNums[i]) == 104)
         {
-            favGenres.push_back("Instrumental");
+            favGenres.push_back("instrumental");
             valid = true;
         }
         if (int(genreNums[i]) == 105)
         {
-            favGenres.push_back("Country");
+            favGenres.push_back("country");
             valid = true;
         }
         if (int(genreNums[i]) == 106)
         {
-            favGenres.push_back("Jazz");
+            favGenres.push_back("jazz");
             valid = true;
         }
         if (int(genreNums[i]) == 107)
         {
-            favGenres.push_back("Classical");
+            favGenres.push_back("classical");
             valid = true;
         }
         if (int(genreNums[i]) == 108)
         {
-            favGenres.push_back("Reggae");
+            favGenres.push_back("reggae");
             valid = true;
         }
         if (int(genreNums[i]) == 109)
         {
-            favGenres.push_back("Foreign");
+            favGenres.push_back("foreign");
             valid = true;
         }
         if(!valid)
@@ -311,7 +317,6 @@ vector<string>getGenres(string genreNums) {
         }
     }
     return favGenres;
-
 }
 
 void readFiles(vector<song> &SongCatalog) {
