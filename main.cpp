@@ -26,6 +26,7 @@ void merge(song arr[], int left, int mid, int right);
 void mergeSort(song arr[], int left, int right);
 void mergeArrayWithTimeOutput(vector<song>);
 void mergeSortPlaylist(vector<song>playlist);
+void print();
 
 
 int main() {
@@ -84,7 +85,23 @@ int main() {
         myfile << artists << endl;
     }
 
-    cout << "--------------------------------------------------------------------------------" << endl;
+    myfile << "--------------------------------------------------------------------------------" << endl;
+    myfile << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
+    myfile << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
+    myfile << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
+    myfile << "---------------------------------------------------------------------------------" << endl;
+    myfile << "Most Common Artists: " << endl ;
+    map<string, int> top5Artists = playlistObj->topArtists();
+    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
+        myfile << "Artist: " << it->first << "| Frequency " << it->second << '\n';
+
+    myfile << "----------------------------------------------------------------------------------" << endl;  
+
+     
+    myfile.close();
+
+    cout << "-----------------------------------------------------------------------------------" << endl;
+    cout << endl;
     cout << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
     cout << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
     cout << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
@@ -94,10 +111,12 @@ int main() {
     for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
         cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
 
-    myfile.close();
+    cout << "--------------------------------------------------------" << endl;  
     
     cout << endl;
     cout << "Thank you for using the Potential Carnival!" << endl;
+    cout << "And special thanks to spotify for providing the data!" << endl;
+    print();
 
   
 
@@ -118,7 +137,7 @@ Survey readSurvey() {
             cout << endl;
 
             cout << "What do you want to name your playlist?" << endl;
-            cin >> results.playlistName;
+            getline(cin, results.playlistName);
 
             cout << "What are your favorite genres?" << endl;
             cout << "Input should be a list of lowercase letters without spaces, ex: R&B and Jazz  is 'dg'. " << endl;
@@ -214,6 +233,7 @@ results.favGenre = getGenres(genre)[0];
 
             cout << "What decade(s) of music do you prefer?" << endl;
             cout << "1.) 1920-1950 2.) 1960-1970 3.) 1980-1990 4.) 2000-2020 " << endl;
+            cout << "Enter the corresponding numbers in a line without any spaces, ex: 1980 - 1940 & 2000 - 2020 '34' " << endl;
             cin >> ans;
             for(int i = 0; i < 4; i ++)
             {
@@ -242,7 +262,7 @@ results.favGenre = getGenres(genre)[0];
                     results.favDecades[3] = true;
                     valid = true;
                 }
-                if(!valid) {
+                if(!valid || ans.size() > 4) {
                     invalidResult = true;
                     cout << "Your answer was not formatted correctly!" << endl;
                     cout << "Generating another survey... " << endl;
@@ -251,7 +271,8 @@ results.favGenre = getGenres(genre)[0];
 
             }
 
-            cout << "Do you prefer happy (1) or sad music (2)?" << endl;
+            cout << "Do you prefer happy or sad music?" << endl;
+             cout << "Enter 1 if happy, 2 if sad" << endl;
             cin >> ans;
             if (ans == "1")
                 results.isHappy = true;
@@ -265,6 +286,7 @@ results.favGenre = getGenres(genre)[0];
             }
 
             cout << "Do you prefer louder (1) or quieter music (2)?" << endl;
+            cout << "Enter 1 if louder, 2 if quieter" << endl;
             cin >> ans;
             if (ans == "1")
             {
@@ -642,7 +664,6 @@ void mergeSort(song arr[], int left, int right) {
 
 void mergeArrayWithTimeOutput(vector<song>SongCatalog)
 {
-
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
@@ -759,5 +780,62 @@ void mergeSortPlaylist(vector<song>playlist){
 
     }
     
+
+}
+
+void print()
+{
+
+cout << "  ``   ``  ``   ``  ``  ```  ``  ``` `.--:///++++++++++///:--.` ```  ``  ```  ``  ``   ``  ``   ``" << endl;  
+cout << " ``  ```  ``  ```  ``  ``   ``  .-:/++oooooooooooooooooooooooooo++/:-.  ``   ``  ``  ```  ``  ```  `` " << endl;  
+cout << "   ``   ``  ``   ``  ``  ```.-/+oooooooooooooooooooooooooooooooooooooo+/-.```  ``  ``   ``  ``   ``   " << endl;  
+cout << " ``   ``  ``  ``   ``  ``-/+oooooooooooooooooooooooooooooooooooooooooooooo+/-`   ``   ``  ``  ``   `` " << endl;  
+cout << " ``   ``  ``  ``   ```-/+oooooooooooooooooooooooooooooooooooooooooooooooooooo+/-```   ``  ``  ``   `` " << endl;  
+cout << "   ``   ``  ``   ``.:+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+:.``   ``  ``   ``   " << endl;  
+cout << " ``  ```  ``  ```./oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/.```  ``  ```  ``" << endl;  
+cout << "  ``   ``  ```-/oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/-```  ``   ``  " << endl;  
+cout << " ``  ```  `` ./oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/. ``  ```  ``" << endl;  
+cout << "   ``   `` `/+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+/` ``   ``  " << endl;  
+cout << " ``  ```  -+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+-  ```  ``" << endl;  
+cout << "   ``   `:oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo:`   ``  " << endl;  
+cout << "        /oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/ " << endl;  
+cout << " ``  `.+oooooooooooooooooooo+++++////::::::::::::/:////+++++oooooooooooooooooooooooooooooooooo+.`  ``" << endl;  
+cout << "   ```+ooooooooooooo++//:--..```` ```  ``  ``   ``  ``````...--:://++oooooooooooooooooooooooooo/```  " << endl;  
+cout << " ``  /ooooooooooo+:..` ``   ``  ``   ``  ``  ```  ``  ```  ``  ``  `..-:/++ooooooooooooooooooooo/  ``" << endl;  
+cout << "   `/ooooooooooo+.`  ``  ```  ``  ```  ``  ``   ``  ``   ``  ``  ```  ``  `.-:/+ooooooooooooooooo:`  " << endl;  
+cout << " ``-oooooooooooo:  ``  ``   ``  ``   ``  ``  ```  ``  ```  ``  ``   ``  ``   ```.:/+oooooooooooooo-``" << endl;  
+cout << "  `+oooooooooooo+.`  ``  `````..--::://///////////::::--...````  ```  ``  ```  ``  `-/+ooooooooooo+` " << endl;  
+cout << " `-oooooooooooooo+/-...-:/+++oooooooooooooooooooooooooooooo+++/::-.```  ``   ``  ``  `.+ooooooooooo-`" << endl;  
+cout << " `+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo++:-.```   ``  ``  :ooooooooooo+`" << endl;  
+cout << " .oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+/-.```     `+oooooooooooo." << endl;  
+cout << " :oooooooooooooooooooooooooo+++/::::------.-------::://+++oooooooooooooooooooo+/-.```:+ooooooooooooo:" << endl;  
+cout << " /ooooooooooooooooooo+/:--.`` ``  ```  ``  ``   ``  ``  ``..-::/+ooooooooooooooooooooooooooooooooooo/" << endl;  
+cout << " +oooooooooooooooooo/` ``   ``  ``   ``  ``  ```  ``  ```  ``  ```.-:+oooooooooooooooooooooooooooooo+" << endl;  
+cout << " +ooooooooooooooooo+```  ```  ``  ```  ``  ``   ``  ``   ``  ``  ```  `.-/+ooooooooooooooooooooooooo+" << endl;  
+cout << " +oooooooooooooooooo-  ``   ```.--:::///////////::::-...`  ``  ``   ``  ````-/oooooooooooooooooooooo+" << endl;  
+cout << " /ooooooooooooooooooo/:--:/++oooooooooooooooooooooooooooo++/:-.` ```  ``  ``` `:oooooooooooooooooooo/" << endl;  
+cout << " :oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+/:-.`  ``   `` :ooooooooooooooooooo:" << endl;  
+cout << " .ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+/-.``    `/ooooooooooooooooooo." << endl;  
+cout << " `+ooooooooooooooooooooooooooooo++/////::::::://///+++oooooooooooooooooo++:-..-+ooooooooooooooooooo+`" << endl;  
+cout << " `-oooooooooooooooooooo+/::--.`````````  ``  ```  `````..-::/+ooooooooooooooooooooooooooooooooooooo-`" << endl;  
+cout << "  `+oooooooooooooooooo:` ```  ``  ```  ``  ``   ``  ``   ``  `..:/+ooooooooooooooooooooooooooooooo+` " << endl;  
+cout << " ``-oooooooooooooooooo```   ``  ````.....--.....``.`` ```  ``  `````-/+ooooooooooooooooooooooooooo-``" << endl;  
+cout << "   `/ooooooooooooooooo+-..---://++++++++ooooooo+++++++/::-.` ``  ```  `.-+ooooooooooooooooooooooo/`  " << endl;  
+cout << " `` `/oooooooooooooooooo++ooooooooooooooooooooooooooooooooo++/:-.`  ``  ``+ooooooooooooooooooooo/  ``" << endl;  
+cout << "   ```+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooo++:-` `` `+oooooooooooooooooooo+```  " << endl;  
+cout << " ``  `.+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+/::/+oooooooooooooooooooo+.   ``" << endl;  
+cout << "    ` `/oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/` `    " << endl;  
+cout << "   ``   `:oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo:`   ``  " << endl;  
+cout << " ``  ```  -+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+-  ```  ``" << endl;  
+cout << "   ``   `` `/oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/` ``   ``  " << endl;  
+cout << " ``  ```  `` ./oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/. ``  ```  ``" << endl;  
+cout << "   ``   ``  ```-+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+-```  ``   ``  " << endl;  
+cout << " ``  ```  ``  ```-/oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo/.```  ``  ```  ``" << endl;  
+cout << "   ``   ``  ``   ``.:+oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo+:.``   ``  ``   ``  " << endl;  
+cout << " ``   `   ``  ``   ```-/+oooooooooooooooooooooooooooooooooooooooooooooooooooo+/-```   `   ``  ``   ``" << endl;  
+cout << " ``   ``  ``  ``   ``  ``-/+oooooooooooooooooooooooooooooooooooooooooooooo+/-``  ``   ``  ``  ``   ``" << endl;  
+cout << "   ``   ``  ``   ``  ``   ``.-/+oooooooooooooooooooooooooooooooooooooo+/-.```  ``  ``   ``  ``   ``  " << endl;  
+cout << " ``  ```  ``  ```  ``  ``   ``  .-:/++oooooooooooooooooooooooooo++/:-.  ``   ``  ``  ```  ``  ```  ``" << endl;  
+cout << "  ``   ``  ``   ``  ``  ```  ``  ``` `.--:///++++++++++///:--.` ```  ``  ```  ``  ``   ``  ``   ``  " << endl;  
 
 }
