@@ -53,7 +53,7 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                 }
                 //if ascii value is greater than 128 its probably not english
                 else if(mainGenre == "foreign") {
-                    for(int k = 0; k < it->songName.size(); k++) {
+                    for(int k = 0; k < it->songName.length(); k++) {
                         if((int)it->songName[k] > 128) {
                             points+=2;
                             genreCount+=2;
@@ -64,7 +64,7 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                     for (int j = 0; j < likedGenres.size(); j++) {
                         //if ascii value is greater than 128 its probably not english
                         if (likedGenres[j] == "foriegn") {
-                            for (int k = 0; k < it->songName.size(); k++) {
+                            for (int k = 0; k < it->songName.length(); k++) {
                                 if ((int) it->songName[k] > 128) {
                                     points++;
                                     genreCount++;

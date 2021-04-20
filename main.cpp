@@ -73,6 +73,7 @@ int main() {
     mergeSortPlaylist(playlistObj->songQ);
 
     cout << "Writing Plalist Data to files! It will be found under './playlist.txt' " << endl;
+    //outputs the playlist to the text file so that one can read the songs at anytime on the document. 
 
     ofstream myfile;
     myfile.open ("./playlist.txt");
@@ -91,6 +92,7 @@ int main() {
     }
 
 
+    //outputs some stats about the playlist generated. 
     myfile << "--------------------------------------------------------------------------------" << endl;
     myfile << "Here are some statistics about your playlist: " << endl;
     myfile << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
@@ -105,8 +107,6 @@ int main() {
 
      
     myfile.close();
-
-
 
     end = std::chrono::system_clock::now();  
     std::chrono::duration<double> elapsed_seconds = end - start;
@@ -132,13 +132,11 @@ int main() {
     cout << "And special thanks to spotify for providing the data!" << endl;
     print();
 
-  
-
     return 0;
 }
 
 Survey readSurvey() {
-
+    //returns survey object of results so that playlist can be generated and accounts for input errors
     bool invalidResult = false;
     bool surveyComplete = false;
     Survey results;
@@ -334,6 +332,7 @@ Survey readSurvey() {
     return results;
 }
 
+//given input to answer the question of what genres that user prefers, return string of genres. 
 vector<string>getGenres(string genreNums) {
     vector<string>favGenres;
     for (int i = 0; i < genreNums.size(); i++) {
@@ -424,6 +423,7 @@ vector<string>getGenres(string genreNums) {
     return favGenres;
 }
 
+//reads in file and parses song and also assigns artist and genres
 void readFiles(vector<song> &SongCatalog) {
     ifstream file;
     string line;
@@ -579,6 +579,7 @@ void readFiles(vector<song> &SongCatalog) {
     return;
 }
 
+//uses shellsort to sort the songs in the song catalog by duration
 int Shellsort(song arr[], int n)
 {
 /* From Lecture Slides on Shellsort in Module 6
@@ -626,6 +627,7 @@ void shellSortWithTimeOutput(vector<song>SongCatalog)
     std::cout << "elapsed time to do shell sort: " << elapsed_seconds.count() << "s\n";
 }
 
+//uses mergesort to sort the songs in the song catalog by duration
 void merge(song arr[], int left, int mid, int right) {
     int temp1 = mid - left + 1;
     int temp2 = right - mid;
@@ -701,7 +703,7 @@ void mergeArrayWithTimeOutput(vector<song>SongCatalog)
     std::cout << "elapsed time to do merge sort: " << elapsed_seconds.count() << "s\n";
 }
 
-//sort via popularity
+//merge sort via popularity
 void mergePopularity(song arr[], int left, int mid, int right) {
     int temp1 = mid - left + 1;
     int temp2 = right - mid;
@@ -759,6 +761,7 @@ void mergeSortPopularity(song arr[], int left, int right) {
     mergePopularity(arr, left, mid, right);
 }
 
+//asks user if they want their playlist to be sorted by popularity
 void mergeSortPlaylist(vector<song>playlist){
 
     bool validInput = false;
