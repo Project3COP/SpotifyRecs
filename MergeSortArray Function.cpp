@@ -10,6 +10,9 @@
 #include "Survey.h"
 using namespace std;
 
+void merge(song arr[], int left, int mid, int right);
+void mergeSort(song arr[], int left, int right);
+
 void merge(song arr[], int left, int mid, int right) {
     int temp1 = mid - left + 1;
     int temp2 = right - mid;
