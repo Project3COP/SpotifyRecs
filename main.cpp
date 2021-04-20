@@ -138,20 +138,19 @@ Survey readSurvey() {
 
             string genre;
             cout << "If you had to pick one, which is your favorite genre?" << endl;
-            cout << "Type out the corresponding letter, ex Jazz: 'j' " << endl;
+            cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
-                 << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl <<
-                 "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl <<
-                 "m.)Foreign" << endl;
+            << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl << 
+            "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl << 
+            "m.)Foreign" << endl;
             cin >> genre;
-            results.favGenre = getGenres(genre)[0];
-            if(results.favGenre.size() != 3 || getGenres(genre)[0].size() == 0) 
-            {
-                invalidResult = true;
-                cout << "Your answer was not formatted correctly!" << endl;
-                cout << "Generating another survey... "<< endl;
-                break;
-            }
+            if(genre.size() > 1) {
+            invalidResult = true;
+            cout << "Your answer was not formatted correctly!" << endl;
+            cout << "Generating another survey... "<< endl;
+            break;
+}
+results.favGenre = getGenres(genre)[0];
 
             string ans;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
@@ -736,13 +735,7 @@ void mergeSortPlaylist(vector<song>playlist){
     if(ans == "yes")
     {
             cout << "Sorting Playlist...." << endl;
-            // vector<song>playlist;
-            // queue<song>temp = playlistQ;
-            // while(!temp.empty())
-            // {
-            //     playlist.push_back(temp.front());
-            //     temp.pop();
-            // }
+          
             song *mergeArray = &playlist[0];
             for (size_t i = 0; i < playlist.size(); ++i) 
                 mergeArray[i] = playlist[i];
