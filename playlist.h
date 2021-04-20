@@ -25,7 +25,8 @@ public:
     map<string, int> mostCommonArtist;
 
     playlist(vector<song> catalog, Survey surveyRes, int cap);
-    void shuffle();
+    void shuffle(void);
+    map<string, int> topArtists(void);
 
 private:
     vector<string> likedGenres;
