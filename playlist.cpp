@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <map>
+#include <iterator>
 #include "playlist.h"
 #include "song.h"
 #include "BST.h"
@@ -26,6 +28,9 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
 
     this->tree = new BST();
 
+    this->avgBasicness = 0;
+    this->avgDanceability = 0;
+
     int genreCount = 0;
     int points = 0;
 
@@ -33,7 +38,7 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
     while(it != catalog.end()) {
         //add points for genres, 2 points if main genre, cap at 5 points for genres
         //if they like all genres dont need to enter for loop
-        if(it->genres.size() == 13) {
+        if(likedGenres.size() >= 13) {
             points = 5;
             genreCount = 5;
         }
@@ -46,7 +51,25 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                     points += 2;
                     genreCount += 2;
                 }
+                //if ascii value is greater than 128 its probably not english
+                else if(mainGenre == "foreign") {
+                    for(int k = 0; k < it->songName.size(); k++) {
+                        if((int)it->songName[k] > 128) {
+                            points+=2;
+                            genreCount+=2;
+                        }
+                    }
+                }
+                //if ascii value is greater than 128 its probably not english
                 for (int j = 0; j < likedGenres.size(); j++) {
+                    if(likedGenres[j] == "foriegn") {
+                        for(int k = 0; k < it->songName.size(); k++) {
+                            if((int)it->songName[k] > 128) {
+                                points++;
+                                genreCount++;
+                            }
+                        }
+                    }
                     if (it->genres[i].find(likedGenres[j]) != string::npos) {
                         points++;
                         genreCount++;
@@ -117,17 +140,33 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                 points = 0;
             }
         }
+        //how fit it is according to user survey inputs
         it->fitness = points;
+
         if(points >= cap) {
             if(!this->tree->insert(it.base())) {
                 cout << "Error for: " << it->songName << endl;
                 break;
+            }
+            //calculate fun outputs
+            this->avgBasicness += it->popularity;
+            this->avgDanceability += it->danceability;
+            for(int i =0; i < it->artists.size(); i++) {
+                map<string, int>::iterator it2 = mostCommonArtist.find(it->artists[i]);
+                if(it2 != mostCommonArtist.end()) {
+                    mostCommonArtist[it->artists[i]]++;
+                }
+                else {
+                    mostCommonArtist[it->artists[i]] = 1;
+                }
             }
         }
         it++;
         points = 0;
         genreCount = 0;
     }
+    this->avgBasicness = floor(this->avgBasicness/this->tree->size);
+    this->avgDanceability = this->avgDanceability/this->tree->size;
     return;
 }
 
