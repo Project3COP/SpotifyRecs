@@ -140,6 +140,7 @@ Survey readSurvey() {
             cout << "If you had to pick one, which is your favorite genre?" << endl;
             cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
+
             << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl << 
             "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl << 
             "m.)Foreign" << endl;
@@ -151,6 +152,7 @@ Survey readSurvey() {
             break;
 }
 results.favGenre = getGenres(genre)[0];
+
 
             string ans;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
@@ -300,6 +302,7 @@ vector<string>getGenres(string genreNums) {
             {
                 favGenres.push_back(arr[i]);
             }
+
             valid = true;
             break;
         }
