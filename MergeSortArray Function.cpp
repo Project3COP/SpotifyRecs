@@ -72,7 +72,12 @@ void mergeSort(song arr[], int left, int right) {
 
 int main()
 {
-    mergeSort(arr, 0, SongCatalog.size());
+    song *mergeArray = &SongCatalog[0];
+    for (size_t i = 0; i < SongCatalog.size(); ++i) {
+        mergeArray[i] = SongCatalog[i];
+    }
+    
+    mergeSort(mergeArray, 0, SongCatalog.size());
 
     return 0;
 }
