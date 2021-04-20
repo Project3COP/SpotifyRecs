@@ -175,7 +175,7 @@ Survey readSurvey() {
             cout << endl;
             cout << "What decade(s) of music do you prefer?" << endl;
             cout << "1.) 1920-1950 2.) 1960-1970 3.) 1980-1990 4.) 2000-2020 " << endl;
-            cout << "Enter the corresponding numbers in a line without any spaces, ex: 1980 - 1940 & 2000 - 2020 '34' " << endl;
+            cout << "Enter the corresponding numbers in a line without any spaces, ex: 1980 - 1990 & 2000 - 2020 '34' " << endl;
             cin >> ans;
             for(int i = 0; i < 4; i ++)
             {
@@ -801,7 +801,7 @@ void generatePlaylist(Survey results, vector<song>SongCatalog)
     cout << "--------------------------------------------------------" << endl;
     cout << "Most Common Artists: " << endl ;
     for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
-        cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
+        cout << "Artist: " << it->first << " | Frequency " << it->second << '\n';
 
     cout << "--------------------------------------------------------" << endl;  
 
