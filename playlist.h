@@ -8,6 +8,7 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <map>
 #include "song.h"
 #include "BST.h"
 #include "Survey.h"
@@ -19,9 +20,13 @@ public:
     BST* tree;
     vector<song> songQ;
     string playName;
+    int avgBasicness;
+    float avgDanceability;
+    map<string, int> mostCommonArtist;
 
     playlist(vector<song> catalog, Survey surveyRes, int cap);
-    void shuffle();
+    void shuffle(void);
+    map<string, int> topArtists(void);
 
 private:
     vector<string> likedGenres;
