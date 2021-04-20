@@ -10,27 +10,52 @@
 #include "Survey.h"
 #include "BST.h"
 #include "Node.h"
+#include <chrono>
+#include <map>
 
 using namespace std;
+using namespace std::chrono;
+
 
 Survey readSurvey();
 vector<string>getGenres(string genreNums);
 void readFiles(vector<song>&);
-
+void shellSortWithTimeOutput(vector<song>);
 int Shellsort(song arr[], int n);
+void merge(song arr[], int left, int mid, int right);
+void mergeSort(song arr[], int left, int right);
+void mergeArrayWithTimeOutput(vector<song>);
+void mergeSortPlaylist(vector<song>playlist);
 
 
 int main() {
      
+    cout << "Welcome to the Potential Carnival!" << endl;
+    cout << endl;
+    cout << "Crunching Music Data" << endl;
+    cout << ". . . " << endl;
     //*****Generates SongCatalog*****
     vector<song> SongCatalog;
     readFiles(SongCatalog);
+    cout << endl;
 
+    cout << "Sorting Music Data " << endl;
+    cout << ". . . " << endl;
+    shellSortWithTimeOutput(SongCatalog);
+    mergeArrayWithTimeOutput(SongCatalog);
+
+    cout << endl;
+    cout << "Now let's answer some question so that we can generate a playlist for you!" << endl;
     //*****Survey*****
     Survey results = readSurvey(); //reads in survey results
 
+    cout << "Thank you for completing the survey! " << endl;
+
+    cout << "Generating Playlist Now " << endl;
+    cout << " . . . " << endl;
+
     //****Generates Playlist*****
-    int fitCap = 10;
+    int fitCap = 13;
     playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
     while(playlistObj->tree->size < 10) {
         delete playlistObj;
@@ -39,18 +64,42 @@ int main() {
     //generates vector songQ by post order traversal
     playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
     playlistObj->shuffle();
+    cout << "How would you like your playlist to be sorted?" << endl;
+    mergeSortPlaylist(playlistObj->songQ);
 
+    cout << "Writing Plalist Data to files! It will be found under './playlist.txt' " << endl;
 
-    
-    //*****ShellSort*****
-    song *arr = &SongCatalog[0];
-    for (size_t i = 0; i < SongCatalog.size(); ++i) {
-        arr[i] = SongCatalog[i];
+    ofstream myfile;
+    myfile.open ("./playlist.txt");
+    myfile << results.playlistName << endl;
+    for(int i = 0; i < playlistObj->songQ.size(); i ++)
+    {
+        myfile << playlistObj->songQ.at(i).songName << " by ";
+        string artists;
+        for(int x = 0; x < playlistObj->songQ.at(i).artists.size(); x++)
+        {
+            artists += playlistObj->songQ.at(i).artists[x];
+            artists += " ";
+        }
+        myfile << artists << endl;
     }
 
-    Shellsort(arr, SongCatalog.size());
+    cout << "--------------------------------------------------------------------------------" << endl;
+    cout << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
+    cout << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
+    cout << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
+    cout << "--------------------------------------------------------" << endl;
+    cout << "Most Common Artists: " << endl ;
+    map<string, int> top5Artists = playlistObj->topArtists();
+    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
+        cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
 
+    myfile.close();
+    
+    cout << endl;
+    cout << "Thank you for using the Potential Carnival!" << endl;
 
+  
 
     return 0;
 }
@@ -91,11 +140,19 @@ Survey readSurvey() {
             cout << "If you had to pick one, which is your favorite genre?" << endl;
             cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
-                 << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl <<
-                 "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl <<
-                 "m.)Foreign" << endl;
+
+            << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl << 
+            "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl << 
+            "m.)Foreign" << endl;
             cin >> genre;
-            results.favGenre = getGenres(genre)[0];
+            if(genre.size() > 1) {
+            invalidResult = true;
+            cout << "Your answer was not formatted correctly!" << endl;
+            cout << "Generating another survey... "<< endl;
+            break;
+}
+results.favGenre = getGenres(genre)[0];
+
 
             string ans;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
@@ -239,8 +296,13 @@ vector<string>getGenres(string genreNums) {
     for (int i = 0; i < genreNums.size(); i++) {
         bool valid = false;
         if(int(genreNums[i]) == 110) {
-            favGenres = {"pop", "hip hop", "rap", "r&b", "rock", "electro", "alternative",
+            string arr [] = {"pop", "hip hop", "rap", "r&b", "rock", "electro", "alternative",
                          "instrumental", "country", "jazz", "classical", "reggae", "foreign"};
+            for(int i = 0; i < 13; i ++)
+            {
+                favGenres.push_back(arr[i]);
+            }
+
             valid = true;
             break;
         }
@@ -505,3 +567,197 @@ int Shellsort(song arr[], int n)
     return 0;
 }
 
+void shellSortWithTimeOutput(vector<song>SongCatalog)
+{
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
+    song *arr = &SongCatalog[0];
+    for (size_t i = 0; i < SongCatalog.size(); ++i) {
+        arr[i] = SongCatalog[i];
+    }
+    Shellsort(arr, SongCatalog.size());
+    end = std::chrono::system_clock::now();  
+    std::chrono::duration<double> elapsed_seconds = end - start;
+  
+    std::cout << "elapsed time to do shell sort: " << elapsed_seconds.count() << "s\n";
+}
+
+void merge(song arr[], int left, int mid, int right) {
+    int temp1 = mid - left + 1;
+    int temp2 = right - mid;
+ 
+    // Create temp arrays
+    song L[temp1], R[temp2];
+ 
+    // Copy data to temp arrays L[] and R[]
+    for (int i = 0; i < temp1; i++) {
+        L[i] = arr[left + i];
+    }
+    for (int j = 0; j < temp2; j++) {
+        R[j] = arr[mid + 1 + j];
+    }
+ 
+    // Merge the temp arrays:
+    int i = 0;  //First subarray
+    int j = 0;  //Second subarray
+    int k = left;  //Merged subarray
+ 
+    while (i < temp1 && j < temp2) {
+        if (L[i].duration <= R[j].duration) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of L[]
+    while (i < temp1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of R[]
+    while (j < temp2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(song arr[], int left, int right) {
+    if (left >= right) {
+        return;  //returns recursively
+    }
+    int mid = left + (right - left)/2;
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid+1, right);
+    merge(arr, left, mid, right);
+}
+
+void mergeArrayWithTimeOutput(vector<song>SongCatalog)
+{
+
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
+    song *mergeArray = &SongCatalog[0];
+    for (size_t i = 0; i < SongCatalog.size(); ++i) {
+        mergeArray[i] = SongCatalog[i];
+    }
+    int arr_size = sizeof(SongCatalog.size()) / sizeof(mergeArray[0]);
+    mergeSort(mergeArray, 0, arr_size);
+
+    end = std::chrono::system_clock::now();  
+    std::chrono::duration<double> elapsed_seconds = end - start;
+
+    std::cout << "elapsed time to do merge sort: " << elapsed_seconds.count() << "s\n";
+}
+
+//sort via popularity
+void mergePopularity(song arr[], int left, int mid, int right) {
+    int temp1 = mid - left + 1;
+    int temp2 = right - mid;
+ 
+    // Create temp arrays
+    song L[temp1], R[temp2];
+ 
+    // Copy data to temp arrays L[] and R[]
+    for (int i = 0; i < temp1; i++) {
+        L[i] = arr[left + i];
+    }
+    for (int j = 0; j < temp2; j++) {
+        R[j] = arr[mid + 1 + j];
+    }
+ 
+    // Merge the temp arrays:
+    int i = 0;  //First subarray
+    int j = 0;  //Second subarray
+    int k = left;  //Merged subarray
+ 
+    while (i < temp1 && j < temp2) {
+        if (L[i].popularity <= R[j].popularity) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of L[]
+    while (i < temp1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    //If there are any, copy the remaining elements of R[]
+    while (j < temp2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSortPopularity(song arr[], int left, int right) {
+    if (left >= right) {
+        return;  //returns recursively
+    }
+    int mid = left + (right - left)/2;
+    mergeSortPopularity(arr, left, mid);
+    mergeSortPopularity(arr, mid+1, right);
+    mergePopularity(arr, left, mid, right);
+}
+
+void mergeSortPlaylist(vector<song>playlist){
+
+    bool validInput = false;
+    bool AnswerAgain = false;
+    
+    while(!validInput)
+    {
+        if(AnswerAgain)
+        {
+            cout << "Invalid Answer! Please write 'yes' or 'no'" << endl;
+            AnswerAgain = false;
+        }
+
+       
+    cout << "Would you like to sort your playlist from least to most popular?" << endl;
+    cout << "Please answer 'yes' or 'no" << endl;
+    string ans;
+    cin >> ans;
+    if(ans == "yes")
+    {
+            cout << "Sorting Playlist...." << endl;
+          
+            song *mergeArray = &playlist[0];
+            for (size_t i = 0; i < playlist.size(); ++i) 
+                mergeArray[i] = playlist[i];
+      
+            int arr_size = sizeof(playlist.size()) / sizeof(mergeArray[0]);
+
+            mergeSortPopularity(mergeArray, 0, arr_size);
+            validInput = true;
+        }
+        if (ans == "no")
+        {   
+         cout << "Okay! Generating Randomized Playlist" << endl;
+         validInput = true;
+        }
+
+        if(!validInput)
+            AnswerAgain = true;
+
+    }
+    
+
+}
