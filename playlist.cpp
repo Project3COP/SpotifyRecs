@@ -51,23 +51,25 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                     points += 2;
                     genreCount += 2;
                 }
-                //if ascii value is greater than 128 its probably not english
+                //if ascii value is < 0 = not valid ascii
                 else if(mainGenre == "foreign") {
                     for(int k = 0; k < it->songName.length(); k++) {
-                        if((int)it->songName[k] > 128) {
+                        if(int((it->songName)[k]) < 0) {
                             points+=2;
                             genreCount+=2;
+                            break;
                         }
                     }
                 }
                 else {
                     for (int j = 0; j < likedGenres.size(); j++) {
-                        //if ascii value is greater than 128 its probably not english
+                        //if ascii value is < 0 = not valid ascii 
                         if (likedGenres[j] == "foriegn") {
                             for (int k = 0; k < it->songName.length(); k++) {
-                                if ((int) it->songName[k] > 128) {
+                                if (int((it->songName)[k]) < 0) {
                                     points++;
                                     genreCount++;
+                                    break;
                                 }
                             }
                         }
@@ -167,8 +169,10 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
         points = 0;
         genreCount = 0;
     }
-    this->avgBasicness = floor(this->avgBasicness/this->tree->size);
-    this->avgDanceability = this->avgDanceability/this->tree->size;
+    if(this->tree->size > 1) {
+        this->avgBasicness = floor(this->avgBasicness / this->tree->size);
+        this->avgDanceability = (this->avgDanceability / this->tree->size);
+    }
     return;
 }
 
@@ -223,5 +227,3 @@ map<string, int> playlist::topArtists(void) {
     }
     return top5Artists;
 }
-
-
