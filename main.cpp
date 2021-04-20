@@ -98,7 +98,7 @@ int main() {
     myfile << "Most Common Artists: " << endl ;
     map<string, int> top5Artists = playlistObj->topArtists();
     for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
-        myfile << "Artist: " << it->first << "| Frequency " << it->second << '\n';
+        myfile << "Artist: " << it->first << "| Frequency: " << it->second << '\n';
 
     myfile << "----------------------------------------------------------------------------------" << endl;  
 
@@ -203,6 +203,7 @@ Survey readSurvey() {
                 break;
             }
 
+            cout << endl;
             cout << "Do you prefer songs that are more energetic or more calming?" << endl;
             cout << "Enter 1 if energetic, 2 if more calming" << endl;
             cin >> ans;
