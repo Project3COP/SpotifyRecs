@@ -77,7 +77,8 @@ int main()
         mergeArray[i] = SongCatalog[i];
     }
     
-    mergeSort(mergeArray, 0, SongCatalog.size());
+    int arr_size = sizeof(mergeArray) / sizeof(mergeArray[0]);
+    mergeSort(mergeArray, 0, arr_size);
 
     return 0;
 }
