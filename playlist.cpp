@@ -60,35 +60,37 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
                         }
                     }
                 }
-                //if ascii value is greater than 128 its probably not english
-                for (int j = 0; j < likedGenres.size(); j++) {
-                    if(likedGenres[j] == "foriegn") {
-                        for(int k = 0; k < it->songName.size(); k++) {
-                            if((int)it->songName[k] > 128) {
-                                points++;
-                                genreCount++;
+                else {
+                    for (int j = 0; j < likedGenres.size(); j++) {
+                        //if ascii value is greater than 128 its probably not english
+                        if (likedGenres[j] == "foriegn") {
+                            for (int k = 0; k < it->songName.size(); k++) {
+                                if ((int) it->songName[k] > 128) {
+                                    points++;
+                                    genreCount++;
+                                }
                             }
                         }
-                    }
-                    if (it->genres[i].find(likedGenres[j]) != string::npos) {
-                        points++;
-                        genreCount++;
+                        if (it->genres[i].find(likedGenres[j]) != string::npos) {
+                            points++;
+                            genreCount++;
+                        }
                     }
                 }
             }
         }
         //song time period : 1st = 1920-1950, 2nd = 1960-1970, 3rd = 1980-1990, 4th = 2000-2020
-        if(songTimes[0] && it->year < 1960) {
-            points++;
+        if(songTimes[0] && (it->year < 1960)) {
+            points+=3;
         }
-        else if(songTimes[1] && it->year < 1980 && it->year >= 1960) {
-            points++;
+        else if(songTimes[1] && (it->year < 1980) && (it->year >= 1960)) {
+            points+=3;
         }
-        else if(songTimes[2] && it->year < 2000 && it->year >= 1980) {
-            points++;
+        else if(songTimes[2] && (it->year < 2000) && (it->year >= 1980)) {
+            points+=3;
         }
-        else if(songTimes[3] && it->year >= 2000) {
-            points++;
+        else if(songTimes[3] && (it->year >= 2000)) {
+            points+=3;
         }
         //instrumental bool = instrumental data and speechiness data
         if(instrumental) {
@@ -115,12 +117,12 @@ playlist::playlist(vector<song> catalog, Survey surveyRes, int cap) {
         //happy bool = valence (high) data
         if(happy) {
             if(it->valence >= 0.5) {
-                points++;
+                points+=2;
             }
         }
         else {
             if(it->valence < 0.5) {
-                points++;
+                points+=2;
             }
         }
         //loud bool = loud data
@@ -189,4 +191,35 @@ void playlist::shuffle() {
     }
     this->songQ = this->tree->traversePostOrder(this->tree->root);
     return;
+}
+
+map<string, int> playlist::topArtists(void) {
+    map<string, int> top5Artists;
+    if(this->mostCommonArtist.size()) {
+        int c = 0;
+        map<string, int>::iterator it;
+        map<string, int>::iterator it2;
+        for (it = mostCommonArtist.begin(); it != mostCommonArtist.end(); it++) {
+            if(top5Artists.size() < 5) {
+                top5Artists[it->first] = it->second;
+                for(it2 = top5Artists.begin(); it2 != top5Artists.end(); it2++) {
+                    c = min(c, it2->second);
+                }
+            }
+            else if(it->second > c) {
+                for(it2 = top5Artists.begin(); it2 != top5Artists.end(); it2++) {
+                    if(it->second > it2->second) {
+                        top5Artists.erase(it2->first);
+                        top5Artists[it->first] = it->second;
+                        c = it->second;
+                        break;
+                    }
+                }
+                for(it2 = top5Artists.begin(); it2 != top5Artists.end(); it2++) {
+                    c = min(c, it2->second);
+                }
+            }
+        }
+    }
+    return top5Artists;
 }
