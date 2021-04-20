@@ -42,6 +42,7 @@ int main() {
 
     cout << "Sorting Music Data " << endl;
     cout << ". . . " << endl;
+    cout << endl;
     shellSortWithTimeOutput(SongCatalog);
     mergeArrayWithTimeOutput(SongCatalog);
 
