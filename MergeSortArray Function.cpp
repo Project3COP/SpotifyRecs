@@ -70,16 +70,9 @@ void mergeSort(song arr[], int left, int right) {
     merge(arr, left, mid, right);
 }
 
-/*
 int main()
 {
-    int arr_size = sizeof(arr) / sizeof(arr[0]);
     mergeSort(arr, 0, SongCatalog.size());
-    for(int i = 0; i < SongCatalog.size(); i ++)
-    {
-        cout << arr[i].duration << " ";
-    }
 
     return 0;
 }
-*/
