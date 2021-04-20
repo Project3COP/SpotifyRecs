@@ -19,6 +19,7 @@ void merge(song arr[], int left, int mid, int right);
 void mergeSort(song arr[], int left, int right);
 void mergeArrayWithTimeOutput(vector<song>);
 void mergeSortPlaylist(vector<song>playlist);
+void generatePlaylist(Survey results, vector<song>SongCatalog);
 void print();
 
 
@@ -38,88 +39,19 @@ int main() {
     cout << endl;
     shellSortWithTimeOutput(SongCatalog);
     mergeArrayWithTimeOutput(SongCatalog);
-
     cout << endl;
-    cout << "Now let's answer some question so that we can generate a playlist for you!" << endl;
+    
     //*****Survey*****
+    cout << "Now let's answer some question so that we can generate a playlist for you!" << endl;
     Survey results = readSurvey(); //reads in survey results
-
     cout << "Thank you for completing the survey! " << endl;
 
+    //****Generates Playlist*****
     cout << "Generating Playlist Now " << endl;
     cout << " . . . " << endl;
+    generatePlaylist(results, SongCatalog);
 
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
-
-    //****Generates Playlist*****
-    int fitCap = 13;
-    playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
-    while(playlistObj->tree->size < 10) {
-        delete playlistObj;
-        playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
-    }
-    //generates vector songQ by post order traversal
-    playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
-    playlistObj->shuffle();
-    cout << "How would you like your playlist to be sorted?" << endl;
-    mergeSortPlaylist(playlistObj->songQ);
-
-    cout << "Writing Plalist Data to files! It will be found under './playlist.txt' " << endl;
-    //outputs the playlist to the text file so that one can read the songs at anytime on the document. 
-
-    ofstream myfile;
-    myfile.open ("./playlist.txt");
-    myfile << results.playlistName << endl;
-    myfile << "********************************"  << endl;
-    for(int i = 0; i < playlistObj->songQ.size(); i ++)
-    {
-        myfile << playlistObj->songQ.at(i).songName << " by ";
-        string artists;
-        for(int x = 0; x < playlistObj->songQ.at(i).artists.size(); x++)
-        {
-            artists += playlistObj->songQ.at(i).artists[x];
-            artists += " ";
-        }
-        myfile << artists << endl;
-    }
-
-
-    //outputs some stats about the playlist generated. 
-    myfile << "--------------------------------------------------------------------------------" << endl;
-    myfile << "Here are some statistics about your playlist: " << endl;
-    myfile << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
-    myfile << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
-    myfile << "---------------------------------------------------------------------------------" << endl;
-    myfile << "Most Common Artists: " << endl ;
-    map<string, int> top5Artists = playlistObj->topArtists();
-    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
-        myfile << "Artist: " << it->first << "| Frequency: " << it->second << '\n';
-
-    myfile << "----------------------------------------------------------------------------------" << endl;  
-
-     
-    myfile.close();
-
-    end = std::chrono::system_clock::now();  
-    std::chrono::duration<double> elapsed_seconds = end - start;
-
-    std::cout << "elapsed time to generate playlist: " << elapsed_seconds.count() << "s\n";
-
-    cout << endl;
-
-    cout << "-----------------------------------------------------------------------------------" << endl;
-    cout << endl;
-    cout << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
-    cout << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
-    cout << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
-    cout << "--------------------------------------------------------" << endl;
-    cout << "Most Common Artists: " << endl ;
-    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
-        cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
-
-    cout << "--------------------------------------------------------" << endl;  
-    
+        
     cout << endl;
     cout << "Thank you for using the Potential Carnival!" << endl;
     cout << "And special thanks to spotify for providing the data!" << endl;
@@ -797,6 +729,81 @@ void mergeSortPlaylist(vector<song>playlist){
 
     }
     
+
+}
+
+void generatePlaylist(Survey results, vector<song>SongCatalog)
+{
+
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
+    int fitCap = 13;
+    playlist *playlistObj = new playlist(SongCatalog, results, fitCap);
+    while(playlistObj->tree->size < 10) {
+        delete playlistObj;
+        playlistObj =  new playlist(SongCatalog, results, --fitCap); //generates playlist
+    }
+    //generates vector songQ by post order traversal
+    playlistObj->songQ = playlistObj->tree->traversePostOrder(playlistObj->tree->root);
+    playlistObj->shuffle();
+    cout << "How would you like your playlist to be sorted?" << endl;
+    mergeSortPlaylist(playlistObj->songQ);
+
+    cout << "Writing Plalist Data to files! It will be found under './playlist.txt' " << endl;
+    //outputs the playlist to the text file so that one can read the songs at anytime on the document. 
+
+    ofstream myfile;
+    myfile.open ("./playlist.txt");
+    myfile << results.playlistName << endl;
+    myfile << "********************************"  << endl;
+    for(int i = 0; i < playlistObj->songQ.size(); i ++)
+    {
+        myfile << playlistObj->songQ.at(i).songName << " by ";
+        string artists;
+        for(int x = 0; x < playlistObj->songQ.at(i).artists.size(); x++)
+        {
+            artists += playlistObj->songQ.at(i).artists[x];
+            artists += " ";
+        }
+        myfile << artists << endl;
+    }
+
+
+    //outputs some stats about the playlist generated. 
+    myfile << "--------------------------------------------------------------------------------" << endl;
+    myfile << "Here are some statistics about your playlist: " << endl;
+    myfile << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
+    myfile << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
+    myfile << "---------------------------------------------------------------------------------" << endl;
+    myfile << "Most Common Artists: " << endl ;
+    map<string, int> top5Artists = playlistObj->topArtists();
+    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
+        myfile << "Artist: " << it->first << "| Frequency: " << it->second << '\n';
+
+    myfile << "----------------------------------------------------------------------------------" << endl;  
+
+     
+    myfile.close();
+
+    end = std::chrono::system_clock::now();  
+    std::chrono::duration<double> elapsed_seconds = end - start;
+
+    std::cout << "elapsed time to generate playlist: " << elapsed_seconds.count() << "s\n";
+
+    cout << endl;
+
+    cout << "-----------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
+    cout << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
+    cout << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
+    cout << "--------------------------------------------------------" << endl;
+    cout << "Most Common Artists: " << endl ;
+    for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
+        cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
+
+    cout << "--------------------------------------------------------" << endl;  
 
 }
 
