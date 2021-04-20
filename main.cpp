@@ -76,7 +76,7 @@ int main() {
     ofstream myfile;
     myfile.open ("./playlist.txt");
     myfile << results.playlistName << endl;
-    cout << "********************************"  << endl;
+    myfile << "********************************"  << endl;
     for(int i = 0; i < playlistObj->songQ.size(); i ++)
     {
         myfile << playlistObj->songQ.at(i).songName << " by ";
@@ -169,10 +169,10 @@ Survey readSurvey() {
             }
 
             string genre;
+            cout << endl;
             cout << "If you had to pick one, which is your favorite genre?" << endl;
-            cout << "Type out the genre of preference, ex Jazz: 'Jazz' " << endl;
+            cout << "Type out the corresponding letter, ex Jazz: 'j' " << endl;
             cout << "a.)Pop" << endl << "b.)Hip-Hop" << endl << "c.)Rap" << endl << "d.)R&B" << endl << "e.)Rock"
-
             << endl << "f.)Electronic" << endl << "g.)Alternative" << endl << "h.)Instrumental" << endl << 
             "i.)Country" << endl << "j.)Jazz" << endl << "k.)Classical" << endl << "l.)Reggae" << endl << 
             "m.)Foreign" << endl;
@@ -182,11 +182,12 @@ Survey readSurvey() {
             cout << "Your answer was not formatted correctly!" << endl;
             cout << "Generating another survey... "<< endl;
             break;
-}
-results.favGenre = getGenres(genre)[0];
+            }
+            results.favGenre = getGenres(genre)[0];
 
 
             string ans;
+            cout << endl;
             cout << "Do you prefer songs that are more instrumental (less lyrics, more music) or songs with more lyrics?"
                  << endl;
             cout << "Enter 1 if instrumental, 2 if more lyrics" << endl;
@@ -216,6 +217,7 @@ results.favGenre = getGenres(genre)[0];
                 break;
             }
 
+            cout << endl;
             cout << "Do you want explicit songs to be included?" << endl;
             cout << "Enter 1 if yes, 2 if not" << endl;
             cin >> ans;
@@ -230,6 +232,7 @@ results.favGenre = getGenres(genre)[0];
                 break;
             }
 
+            cout << endl;
             cout << "Do you prefer songs with a faster or slower tempo?" << endl;
             cout << "Enter 1 if faster, 2 if slower" << endl;
             cin >> ans;
@@ -244,6 +247,7 @@ results.favGenre = getGenres(genre)[0];
                 break;
             }
 
+            cout << endl;
             cout << "What decade(s) of music do you prefer?" << endl;
             cout << "1.) 1920-1950 2.) 1960-1970 3.) 1980-1990 4.) 2000-2020 " << endl;
             cout << "Enter the corresponding numbers in a line without any spaces, ex: 1980 - 1940 & 2000 - 2020 '34' " << endl;
@@ -284,8 +288,9 @@ results.favGenre = getGenres(genre)[0];
 
             }
 
+            cout << endl;
             cout << "Do you prefer happy or sad music?" << endl;
-             cout << "Enter 1 if happy, 2 if sad" << endl;
+            cout << "Enter 1 if happy, 2 if sad" << endl;
             cin >> ans;
             if (ans == "1")
                 results.isHappy = true;
@@ -298,6 +303,7 @@ results.favGenre = getGenres(genre)[0];
                 break;
             }
 
+            cout << endl;
             cout << "Do you prefer louder (1) or quieter music (2)?" << endl;
             cout << "Enter 1 if louder, 2 if quieter" << endl;
             cin >> ans;
