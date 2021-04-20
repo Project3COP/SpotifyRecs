@@ -55,6 +55,9 @@ int main() {
     cout << "Generating Playlist Now " << endl;
     cout << " . . . " << endl;
 
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
     //****Generates Playlist*****
     int fitCap = 13;
     playlist* playlistObj = new playlist(SongCatalog, results, fitCap);
@@ -73,6 +76,7 @@ int main() {
     ofstream myfile;
     myfile.open ("./playlist.txt");
     myfile << results.playlistName << endl;
+    cout << "********************************"  << endl;
     for(int i = 0; i < playlistObj->songQ.size(); i ++)
     {
         myfile << playlistObj->songQ.at(i).songName << " by ";
@@ -85,8 +89,9 @@ int main() {
         myfile << artists << endl;
     }
 
+
     myfile << "--------------------------------------------------------------------------------" << endl;
-    myfile << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
+    myfile << "Here are some statistics about your playlist: " << endl;
     myfile << "Average Popularity (out of 100): " << playlistObj->avgBasicness << endl;
     myfile << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
     myfile << "---------------------------------------------------------------------------------" << endl;
@@ -100,6 +105,15 @@ int main() {
      
     myfile.close();
 
+
+
+    end = std::chrono::system_clock::now();  
+    std::chrono::duration<double> elapsed_seconds = end - start;
+
+    std::cout << "elapsed time to generate playlist: " << elapsed_seconds.count() << "s\n";
+
+    cout << endl;
+
     cout << "-----------------------------------------------------------------------------------" << endl;
     cout << endl;
     cout << "Your playlist has been generated!, Here are some statistics about your playlist: " << endl;
@@ -107,7 +121,6 @@ int main() {
     cout << "Average Danceability (out of 0.99): " << playlistObj->avgDanceability << endl;
     cout << "--------------------------------------------------------" << endl;
     cout << "Most Common Artists: " << endl ;
-    map<string, int> top5Artists = playlistObj->topArtists();
     for (std::map<string,int>::iterator it= top5Artists.begin(); it!= top5Artists.end(); ++it)
         cout << "Artist: " << it->first << "| Frequency " << it->second << '\n';
 
