@@ -1,17 +1,10 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <string>
-#include <algorithm>
-#include <unordered_map>
 #include "song.h"
 #include "playlist.h"
 #include "Survey.h"
 #include "BST.h"
 #include "Node.h"
 #include <chrono>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 using namespace std::chrono;
